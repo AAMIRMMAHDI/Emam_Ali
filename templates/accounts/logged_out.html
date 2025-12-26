@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خروج موفق</title>
+    <style>
+        body { font-family: 'Vazirmatn', sans-serif; background: #e8f5e9; display: grid; place-items: center; height: 100vh; }
+        .box { background: white; padding: 40px; border-radius: 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); text-align: center; }
+        a { display: inline-block; margin-top: 20px; padding: 12px 30px; background: #2e7d32; color: white; text-decoration: none; border-radius: 12px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>✅ با موفقیت از حساب خود خارج شدید</h2>
+        <p>برای ورود مجدد کلیک کنید:</p>
+        <a href="{% url 'accounts:login' %}">ورود به سامانه</a>
+    </div>
+</body>
+</html>

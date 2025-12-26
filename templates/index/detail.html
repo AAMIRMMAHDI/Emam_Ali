@@ -1,0 +1,416 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+
+{% block title %}{{ article.title }} - مجتمع آموزشی امام علی (ع){% endblock %}
+
+{% block extra_head %}
+<style>
+  /* استایل‌های اختصاصی صفحه مقاله */
+
+  .reading-progress {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--border);
+    z-index: 9999;
+  }
+
+  .reading-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--green-accent), var(--green-primary));
+    width: 0%;
+    transition: width 0.2s;
+  }
+
+  .breadcrumb {
+    background: var(--green-light);
+    padding: 25px 0;
+    margin-bottom: 50px;
+    border-bottom: 2px solid var(--border);
+  }
+
+  .breadcrumb-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding-inline: 20px;
+  }
+
+  .breadcrumb a {
+    color: var(--green-primary);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--green-accent);
+    text-decoration: underline;
+  }
+
+  .main-content {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 60px;
+    margin: 60px auto 100px;
+    max-width: 1400px;
+    padding: 0 20px;
+  }
+
+  .article {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-2);
+    overflow: hidden;
+    border: 2px solid var(--border);
+  }
+
+  .article-header {
+    padding: 60px 60px 30px;
+    background: linear-gradient(135deg, var(--green-light) 0%, transparent 100%);
+  }
+
+  .article-category {
+    display: inline-block;
+    background: var(--green-primary);
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-1);
+  }
+
+  .article-title {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    color: var(--green-darker);
+    line-height: 1.25;
+    margin-bottom: 20px;
+    font-weight: 900;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 10px 20px;
+    border-radius: 15px;
+    box-shadow: var(--shadow-1);
+  }
+
+  .article-featured-image {
+    width: 100%;
+    height: 500px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .article-featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s ease;
+  }
+
+  .article-featured-image:hover img {
+    transform: scale(1.05);
+  }
+
+  .article-body {
+    padding: 60px;
+  }
+
+  .article-content {
+    line-height: 1.9;
+    color: var(--text);
+    font-size: 1.2rem;
+  }
+
+  .article-content h2 {
+    color: var(--green-darker);
+    margin: 50px 0 25px;
+    font-size: 2.2rem;
+    font-weight: 800;
+    border-right: 6px solid var(--green-accent);
+    padding-right: 20px;
+  }
+
+  .article-content p { margin-bottom: 30px; text-align: justify; }
+
+  .article-content blockquote {
+    border-right: 6px solid var(--green-accent);
+    padding: 35px 40px;
+    margin: 40px 0;
+    background: var(--green-light);
+    border-radius: 15px;
+    font-style: italic;
+    color: var(--green-darker);
+    font-size: 1.3rem;
+    box-shadow: var(--shadow-1);
+  }
+
+  .article-footer {
+    padding: 40px 60px;
+    border-top: 2px solid var(--border);
+    background: var(--green-light);
+  }
+
+  .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 15px;
+  }
+
+  .article-tag {
+    background: white;
+    color: var(--green-primary);
+    padding: 12px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    border: 2px solid var(--border);
+    transition: all 0.3s;
+    font-weight: 600;
+    box-shadow: var(--shadow-1);
+  }
+
+  .article-tag:hover {
+    background: var(--green-primary);
+    color: white;
+    transform: translateY(-3px);
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    position: sticky;
+    top: 140px;
+    height: fit-content;
+  }
+
+  .sidebar-card {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-2);
+    border: 2px solid var(--border);
+    overflow: hidden;
+  }
+
+  .sidebar-title {
+    background: linear-gradient(135deg, var(--green-primary), var(--green-dark));
+    color: white;
+    padding: 25px 30px;
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+
+  .author-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 35px 30px;
+  }
+
+  .author-avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid var(--green-accent);
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-2);
+  }
+
+  .author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .related-articles {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 30px;
+  }
+
+  .related-article {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: var(--green-light);
+    border-radius: 15px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.3s;
+    border: 2px solid transparent;
+  }
+
+  .related-article:hover {
+    background: var(--green-lighter);
+    transform: translateX(-10px);
+    border-color: var(--green-accent);
+    box-shadow: var(--shadow-1);
+  }
+
+  .related-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 3px solid white;
+  }
+
+  .related-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .related-article:hover .related-image img {
+    transform: scale(1.1);
+  }
+
+  @media (max-width: 1200px) {
+    .main-content { grid-template-columns: 1fr; gap: 40px; }
+    .sidebar { position: static; order: -1; }
+  }
+
+  @media (max-width: 768px) {
+    .article-header, .article-body, .article-footer { padding: 30px 25px; }
+    .article-featured-image { height: 300px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress">
+    <div class="reading-progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <div class="breadcrumb-inner container">
+      <a href="/">خانه</a>
+      <span class="separator">›</span>
+      <a href="/list/">ترفندها و دوره‌ها</a>
+      <span class="separator">›</span>
+      <span>{{ article.title }}</span>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content container">
+    <article class="article">
+      <div class="article-header">
+        {% if article.category %}
+          <span class="article-category">{{ article.category.name }}</span>
+        {% endif %}
+        <h1 class="article-title">{{ article.title }}</h1>
+        <div class="article-meta">
+          <div class="meta-item">📅 {{ article.created_at|date:"j F Y" }}</div>
+          <div class="meta-item">⏱️ {{ article.reading_time }} دقیقه خواندن</div>
+          <div class="meta-item">👁️ {{ article.views }} بازدید</div>
+          {% if article.author %}
+            <div class="meta-item">✍️ نویسنده: {{ article.author.name }}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="article-featured-image">
+        <img src="{{ article.featured_image.url }}" alt="{{ article.title }}">
+      </div>
+
+      <div class="article-body">
+        <div class="article-content">
+          {{ article.content|safe }}
+        </div>
+      </div>
+
+      <div class="article-footer">
+        <h4>برچسب‌های مقاله:</h4>
+        <div class="article-tags">
+          {% for tag in article.tag_list %}
+            <a href="#" class="article-tag">{{ tag }}</a>
+          {% empty %}
+            <span>بدون برچسب</span>
+          {% endfor %}
+        </div>
+      </div>
+    </article>
+
+    <aside class="sidebar">
+      {% if article.author %}
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">نویسنده مقاله</h3>
+        <div class="author-info">
+          <div class="author-avatar">
+            <img src="{{ article.author.avatar.url }}" alt="{{ article.author.name }}">
+          </div>
+          <h4 class="author-name">{{ article.author.name }}</h4>
+          <p class="author-bio">{{ article.author.bio }}</p>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">مقالات مرتبط</h3>
+        <div class="related-articles">
+          {% for rel in related_articles %}
+          <a href="{{ rel.get_absolute_url }}" class="related-article">
+            <div class="related-image">
+              <img src="{{ rel.featured_image.url }}" alt="{{ rel.title }}">
+            </div>
+            <div class="related-info">
+              <h4 class="related-title">{{ rel.title }}</h4>
+              {% if rel.category %}
+                <span class="related-category">{{ rel.category.name }}</span>
+              {% endif %}
+            </div>
+          </a>
+          {% empty %}
+            <p style="text-align: center; color: var(--muted);">مقاله مرتبطی یافت نشد.</p>
+          {% endfor %}
+        </div>
+      </div>
+    </aside>
+  </div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Reading progress bar
+  window.addEventListener('scroll', () => {
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (scrollTop / scrollHeight) * 100;
+    document.getElementById('progressBar').style.width = scrolled + '%';
+  });
+</script>
+{% endblock %}

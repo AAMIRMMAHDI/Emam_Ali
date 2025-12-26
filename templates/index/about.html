@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}درباره ما - مجتمع آموزشی امام علی (ع){% endblock %}
+
+{% block extra_head %}
+<style>
+  /* ==== Hero About ==== */
+  .hero-about {
+    background: linear-gradient(135deg, var(--green-darker), var(--green-dark), var(--green-primary));
+    color: #fff;
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .hero-about::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; left: 0; bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    opacity: 0.3;
+  }
+
+  .hero-about-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-about-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.2;
+    margin: 0 0 30px;
+    font-weight: 900;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .hero-about-subtitle {
+    color: #e8f5e9;
+    font-size: 1.3rem;
+    line-height: 1.7;
+    margin: 0 0 40px;
+    opacity: 0.95;
+  }
+
+  /* ==== Story Section ==== */
+  .story-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .story-text {
+    font-size: 1.2rem;
+    line-height: 1.9;
+    color: var(--text);
+  }
+
+  .story-text p {
+    margin-bottom: 25px;
+  }
+
+  .story-text ul {
+    margin: 25px 0;
+    padding-right: 30px;
+  }
+
+  .story-text li {
+    margin-bottom: 15px;
+    position: relative;
+    padding-right: 25px;
+  }
+
+  .story-text li::before {
+    content: '✓';
+    position: absolute;
+    right: 0;
+    color: var(--green-accent);
+    font-weight: bold;
+    font-size: 1.3rem;
+  }
+
+  .story-image {
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-2);
+    border: 3px solid white;
+  }
+
+  .story-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .story-image:hover img {
+    transform: scale(1.05);
+  }
+
+  /* ==== Stats Section ==== */
+  .stats-section {
+    background: linear-gradient(135deg, var(--green-primary), var(--green-dark));
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+    border-radius: 30px;
+    margin: 80px 0;
+    box-shadow: var(--shadow-2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stats-section::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; width: 100%; height: 100%;
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    opacity: 0.3;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-number {
+    font-size: 4rem;
+    font-weight: 900;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  .stat-text {
+    font-size: 1.3rem;
+    opacity: 0.95;
+    line-height: 1.5;
+  }
+
+  /* ==== Contact Form ==== */
+  .contact-form-section {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-2);
+    border: 2px solid var(--border);
+    padding: 60px;
+    margin-top: 60px;
+  }
+
+  .contact-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: var(--green-darker);
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .form-input, .form-textarea {
+    width: 100%;
+    padding: 18px 25px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+    background: var(--green-light);
+    color: var(--text);
+  }
+
+  .form-input:focus, .form-textarea:focus {
+    outline: none;
+    border-color: var(--green-accent);
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.15);
+    background: white;
+  }
+
+  .form-textarea {
+    min-height: 180px;
+    resize: vertical;
+  }
+
+  .form-btn {
+    background: linear-gradient(135deg, var(--green-accent), #66bb6a);
+    color: white;
+    border: none;
+    padding: 18px 45px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-1);
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: 20px;
+  }
+
+  .form-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-2);
+  }
+
+  .contact-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 60px;
+  }
+
+  .contact-info-card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 40px 30px;
+    box-shadow: var(--shadow-1);
+    border: 2px solid var(--border);
+    text-align: center;
+  }
+
+  .contact-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--green-light), #e8f5e9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px;
+    color: var(--green-primary);
+    font-size: 1.8rem;
+  }
+
+  .contact-title {
+    font-size: 1.3rem;
+    color: var(--green-darker);
+    margin-bottom: 15px;
+    font-weight: 800;
+  }
+
+  /* ==== Responsive ==== */
+  @media (max-width: 1200px) {
+    .stats-grid, .contact-info-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .story-content { grid-template-columns: 1fr; }
+    .contact-form { grid-template-columns: 1fr; }
+    .stats-grid, .contact-info-grid { grid-template-columns: 1fr; }
+    .contact-form-section { padding: 40px 30px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+  <!-- Hero About -->
+  <section class="hero-about">
+    <div class="container hero-about-inner">
+      <h1 class="hero-about-title">درباره ما</h1>
+      <p class="hero-about-subtitle">
+        بیش از ۲۵ سال تجربه درخشان در آموزش مهارت‌های تخصصی کامپیوتر و نرم‌افزار
+      </p>
+    </div>
+  </section>
+
+  <!-- Story Section -->
+  <section class="section container">
+    <div class="section-head">
+      <h2 class="section-title">داستان ما</h2>
+      <p class="section-subtitle">سفر ۲۵ ساله ما در آموزش و پرورش نسل آینده</p>
+    </div>
+
+    <div class="story-content">
+      <div class="story-text">
+        {{ about_content.text|safe }}
+      </div>
+      <div class="story-image">
+        {% if about_content.image %}
+          <img src="{{ about_content.image.url }}" alt="محیط آموزشی مجتمع">
+        {% else %}
+          <img src="https://filemoon.ir/wp-content/uploads/2023/09/about-uss.png" alt="محیط آموزشی مجتمع">
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number" data-count="{{ stats.years_experience }}">{{ stats.years_experience }}+</div>
+          <div class="stat-text">سال تجربه آموزشی</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-count="{{ stats.graduates }}">{{ stats.graduates }}+</div>
+          <div class="stat-text">دانش‌آموز فارغ‌التحصیل</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-count="{{ stats.courses }}">{{ stats.courses }}+</div>
+          <div class="stat-text">دوره آموزشی تخصصی</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-count="{{ stats.teachers }}">{{ stats.teachers }}+</div>
+          <div class="stat-text">استاد مجرب و متخصص</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Form Section -->
+  <section class="section container">
+    <div class="section-head">
+      <h2 class="section-title">با ما در تماس باشید</h2>
+      <p class="section-subtitle">سؤالات، پیشنهادات و انتقادات خود را با ما در میان بگذارید</p>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="contact-form-section">
+      <form class="contact-form" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="name">نام و نام خانوادگی</label>
+          <input type="text" name="name" id="name" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">شماره تماس</label>
+          <input type="tel" name="phone" id="phone" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="email">ایمیل</label>
+          <input type="email" name="email" id="email" class="form-input" required>
+        </div>
+        <div class="form-group">
+          <label for="subject">موضوع</label>
+          <input type="text" name="subject" id="subject" class="form-input" required>
+        </div>
+        <div class="form-group full-width">
+          <label for="message">پیام شما</label>
+          <textarea name="message" id="message" class="form-textarea" required></textarea>
+        </div>
+        <button type="submit" class="form-btn">ارسال پیام</button>
+      </form>
+    </div>
+
+    <div class="contact-info-grid">
+      <div class="contact-info-card">
+        <div class="contact-icon">📍</div>
+        <h3 class="contact-title">آدرس ما</h3>
+        <div class="contact-details">
+          اراک، خیابان محسنی، ابتدای کوچه محسنی<br>
+          مجتمع آموزشی امام علی (ع)
+        </div>
+      </div>
+      <div class="contact-info-card">
+        <div class="contact-icon">📞</div>
+        <h3 class="contact-title">تماس با ما</h3>
+        <div class="contact-details">
+          تلفن: ۰۸۶۳۲۲۲۷۲۳۸<br>
+          ایمیل: info@emamali-school.ir
+        </div>
+      </div>
+      <div class="contact-info-card">
+        <div class="contact-icon">🕒</div>
+        <h3 class="contact-title">ساعات کاری</h3>
+        <div class="contact-details">
+          شنبه تا چهارشنبه: ۸ صبح تا ۸ شب<br>
+          پنجشنبه: ۸ صبح تا ۲ بعدازظهر<br>
+          جمعه: تعطیل
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Animated stats counter
+  const statNumbers = document.querySelectorAll('.stat-number');
+  const animateCounter = (element, target) => {
+    let current = 0;
+    const increment = target / 100;
+    const timer = setInterval(() => {
+      current += increment;
+      if (current >= target) {
+        current = target;
+        clearInterval(timer);
+      }
+      element.textContent = Math.floor(current) + '+';
+    }, 20);
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const element = entry.target;
+        const target = parseInt(element.getAttribute('data-count'));
+        if (!element.classList.contains('animated')) {
+          element.classList.add('animated');
+          animateCounter(element, target);
+        }
+      }
+    });
+  }, { threshold: 0.5 });
+
+  statNumbers.forEach(stat => observer.observe(stat));
+</script>
+{% endblock %}

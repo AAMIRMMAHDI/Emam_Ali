@@ -1,0 +1,818 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}لیست دوره‌ها و ترفندها - مجتمع آموزشی امام علی (ع){% endblock %}
+
+{% block extra_head %}
+<style>
+  /* ==== Hero List Page ==== */
+  .hero-list {
+    background: linear-gradient(135deg, var(--green-darker), var(--green-dark), var(--green-primary));
+    color: #fff;
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .hero-list::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; left: 0; bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    opacity: 0.3;
+  }
+
+  .hero-title-list {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    line-height: 1.2;
+    margin: 0 0 20px;
+    font-weight: 900;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .hero-desc-list {
+    color: #e8f5e9;
+    font-size: 1.3rem;
+    line-height: 1.7;
+    margin: 0 auto 40px;
+    opacity: 0.95;
+    max-width: 700px;
+  }
+
+  /* ==== Search & Filter Section ==== */
+  .search-filter-section {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-2);
+    border: 2px solid var(--border);
+    padding: 40px;
+    margin: -40px auto 60px;
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+  }
+
+  .search-box {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .search-input {
+    flex: 1;
+    padding: 18px 25px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1.1rem;
+    background: var(--green-light);
+    color: var(--text);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--green-accent);
+    box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.15);
+    background: white;
+  }
+
+  .search-btn {
+    background: linear-gradient(135deg, var(--green-accent), #66bb6a);
+    color: white;
+    border: none;
+    padding: 0 35px;
+    border-radius: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 1.1rem;
+    box-shadow: var(--shadow-1);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+  }
+
+  .filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .filter-label {
+    font-weight: 800;
+    color: var(--green-darker);
+    font-size: 1.1rem;
+  }
+
+  .filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .filter-btn {
+    background: var(--green-light);
+    color: var(--green-primary);
+    border: 2px solid var(--border);
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .filter-btn:hover {
+    background: var(--green-lighter);
+    transform: translateY(-2px);
+  }
+
+  .filter-btn.active {
+    background: var(--green-primary);
+    color: white;
+    border-color: var(--green-accent);
+    box-shadow: var(--shadow-1);
+  }
+
+  .sort-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .sort-select {
+    padding: 12px 25px;
+    border: 2px solid var(--border);
+    border-radius: 30px;
+    background: white;
+    color: var(--text);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    min-width: 200px;
+  }
+
+  /* ==== Results Info & Tabs ==== */
+  .results-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: var(--green-light);
+    border-radius: var(--radius);
+    border: 2px solid var(--border);
+  }
+
+  .results-count {
+    font-weight: 800;
+    color: var(--green-darker);
+    font-size: 1.2rem;
+  }
+
+  .results-count span {
+    color: var(--green-primary);
+  }
+
+  .view-toggle {
+    display: flex;
+    gap: 10px;
+  }
+
+  .view-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    background: white;
+    border: 2px solid var(--border);
+    color: var(--green-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .view-btn.active {
+    background: var(--green-primary);
+    color: white;
+    border-color: var(--green-accent);
+  }
+
+  .tab-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    justify-content: center;
+  }
+
+  .tab-btn {
+    background: var(--green-light);
+    color: var(--green-primary);
+    border: 2px solid var(--border);
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: 1.1rem;
+  }
+
+  .tab-btn.active {
+    background: var(--green-primary);
+    color: white;
+    border-color: var(--green-accent);
+  }
+
+  /* ==== Grid ==== */
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+  }
+
+  /* Tip Card */
+  .tip-card-list {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .tip-card-list:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-2);
+  }
+
+  .tip-image-list {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .tip-image-list img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .tip-card-list:hover .tip-image-list img {
+    transform: scale(1.05);
+  }
+
+  .tip-category-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255,255,255,0.95);
+    color: var(--green-primary);
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    box-shadow: var(--shadow-1);
+    backdrop-filter: blur(5px);
+  }
+
+  .tip-content-list {
+    padding: 30px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tip-title-list {
+    font-size: 1.4rem;
+    color: var(--green-darker);
+    margin-bottom: 15px;
+    font-weight: 800;
+  }
+
+  .tip-excerpt-list {
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+
+  .tip-link-list {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--green-primary);
+    font-weight: 800;
+    text-decoration: none;
+    padding: 12px 25px;
+    background: var(--green-light);
+    border-radius: 30px;
+    margin-top: auto;
+  }
+
+  .tip-link-list:hover {
+    background: var(--green-primary);
+    color: white;
+    transform: translateX(-5px);
+  }
+
+  .tip-meta-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Course Card */
+  .course-card {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .course-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-2);
+  }
+
+  .course-image {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+  }
+
+  .course-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .course-card:hover .course-image img {
+    transform: scale(1.05);
+  }
+
+  .course-header {
+    padding: 30px 30px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .course-title {
+    font-size: 1.4rem;
+    color: var(--green-darker);
+    margin-bottom: 10px;
+    font-weight: 800;
+  }
+
+  .course-date {
+    color: var(--muted);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .course-content {
+    padding: 20px 30px;
+    flex: 1;
+  }
+
+  .course-text {
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .features-list {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 0;
+  }
+
+  .features-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: var(--green-primary);
+    font-weight: 600;
+  }
+
+  .features-list li::before {
+    content: '✓';
+    color: var(--green-accent);
+    font-weight: 800;
+  }
+
+  .course-footer {
+    padding: 20px 30px;
+    background: var(--green-light);
+    border-top: 1px solid var(--border);
+  }
+
+  .contact-info {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  .btn-primary {
+    display: block;
+    text-align: center;
+    background: linear-gradient(135deg, var(--green-accent), #66bb6a);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: var(--shadow-1);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-2);
+  }
+
+  /* ==== Pagination & No Results ==== */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 60px;
+  }
+
+  .pagination-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: white;
+    border: 2px solid var(--border);
+    color: var(--green-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  .pagination-btn.active {
+    background: var(--green-primary);
+    color: white;
+    border-color: var(--green-accent);
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 80px 40px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-1);
+    border: 2px solid var(--border);
+  }
+
+  .no-results-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    color: var(--green-muted);
+  }
+
+  .no-results-title {
+    font-size: 2rem;
+    color: var(--green-darker);
+    margin-bottom: 15px;
+    font-weight: 800;
+  }
+
+  /* ==== Responsive ==== */
+  @media (max-width: 1200px) {
+    .tips-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .tips-grid { grid-template-columns: 1fr; }
+    .search-box { flex-direction: column; }
+    .tab-buttons { flex-direction: column; }
+    .search-filter-section { padding: 30px 20px; margin: -30px auto 40px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+  <!-- Hero -->
+  <section class="hero-list">
+    <div class="container">
+      <h1 class="hero-title-list">لیست ترفندها و دوره‌های آموزشی</h1>
+      <p class="hero-desc-list">با استفاده از ابزارهای جستجو و فیلتر زیر، ترفندها و دوره‌های مورد نظر خود را پیدا کنید و مهارت‌های خود را ارتقا دهید!</p>
+    </div>
+  </section>
+
+  <!-- Search and Filter -->
+  <section class="search-filter-section container">
+    <div class="search-box">
+      <input type="text" class="search-input" placeholder="جستجو در ترفندها و دوره‌ها..." id="searchInput">
+      <button class="search-btn" id="searchBtn">جستجو</button>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label">فیلتر بر اساس:</div>
+      <div class="filter-buttons" id="filterButtons"></div>
+    </div>
+
+    <div class="sort-section">
+      <div class="filter-label">مرتب‌سازی:</div>
+      <select class="sort-select" id="sortSelect">
+        <option value="newest">جدیدترین</option>
+        <option value="oldest">قدیمی‌ترین</option>
+        <option value="popular">محبوب‌ترین</option>
+        <option value="reading-time">کمترین زمان</option>
+      </select>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <div class="container tips-grid-section">
+    <div class="results-info">
+      <div class="results-count" id="resultsCountText">در حال بارگذاری...</div>
+      <div class="view-toggle">
+        <button class="view-btn active" data-view="grid">▦</button>
+        <button class="view-btn" data-view="list">≡</button>
+      </div>
+    </div>
+
+    <div class="tab-buttons">
+      <button class="tab-btn active" data-tab="tips">ترفندها</button>
+      <button class="tab-btn" data-tab="courses">دوره‌ها</button>
+    </div>
+
+    <div class="tips-grid" id="tipsGrid">
+      <!-- محتوا با JS پر می‌شود -->
+    </div>
+
+    <div class="no-results" id="noResults" style="display: none;">
+      <div class="no-results-icon">🔍</div>
+      <h3 class="no-results-title">نتیجه‌ای یافت نشد</h3>
+      <p class="no-results-text">متأسفانه هیچ نتیجه‌ای با جستجوی شما مطابقت نداشت. لطفاً کلمات کلیدی دیگری را امتحان کنید یا فیلترها را تغییر دهید.</p>
+      <button class="search-btn" id="resetFiltersBtn">بازنشانی فیلترها</button>
+    </div>
+
+    <div class="pagination" id="pagination" style="display: none;">
+      <button class="pagination-btn" id="prevBtn" disabled>←</button>
+      <div class="pagination-numbers" id="paginationNumbers"></div>
+      <button class="pagination-btn" id="nextBtn">→</button>
+    </div>
+  </div>
+
+  <!-- داده‌های JSON برای JS -->
+  <script id="articles-data" type="application/json">{{ articles_data|safe }}</script>
+  <script id="courses-data" type="application/json">{{ courses_data|safe }}</script>
+  <script id="categories-data" type="application/json">{{ categories_data|safe }}</script>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // داده‌ها
+  const articlesData = JSON.parse(document.getElementById('articles-data').textContent);
+  const coursesData = JSON.parse(document.getElementById('courses-data').textContent);
+  const categoriesData = JSON.parse(document.getElementById('categories-data').textContent);
+
+  // DOM Elements
+  const filterButtonsContainer = document.getElementById('filterButtons');
+  const tipsGrid = document.getElementById('tipsGrid');
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
+  const sortSelect = document.getElementById('sortSelect');
+  const viewButtons = document.querySelectorAll('.view-btn');
+  const resultsCountText = document.getElementById('resultsCountText');
+  const noResults = document.getElementById('noResults');
+  const resetFiltersBtn = document.getElementById('resetFiltersBtn');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const paginationNumbers = document.getElementById('paginationNumbers');
+  const pagination = document.getElementById('pagination');
+  const tabButtons = document.querySelectorAll('.tab-btn');
+
+  // State
+  let currentTab = 'tips';
+  let currentFilter = 'all';
+  let currentSearch = '';
+  let currentSort = 'newest';
+  let currentPage = 1;
+  const itemsPerPage = 6;
+
+  // Render filter buttons
+  filterButtonsContainer.innerHTML = `<button class="filter-btn active" data-filter="all">همه</button>`;
+  categoriesData.forEach(cat => {
+    filterButtonsContainer.innerHTML += `<button class="filter-btn" data-filter="${cat.slug}">${cat.name}</button>`;
+  });
+  const filterButtons = document.querySelectorAll('.filter-btn');
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderItems();
+    setupEventListeners();
+  });
+
+  function setupEventListeners() {
+    // Tabs
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.dataset.tab;
+        currentPage = 1;
+        renderItems();
+      });
+    });
+
+    // Search
+    searchBtn.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', e => e.key === 'Enter' && performSearch());
+
+    function performSearch() {
+      currentSearch = searchInput.value.trim().toLowerCase();
+      currentPage = 1;
+      renderItems();
+    }
+
+    // Filters
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        currentPage = 1;
+        renderItems();
+      });
+    });
+
+    // Sort
+    sortSelect.addEventListener('change', () => {
+      currentSort = sortSelect.value;
+      renderItems();
+    });
+
+    // View toggle (در صورت نیاز به لیست ویو)
+    viewButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        viewButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Reset
+    resetFiltersBtn.addEventListener('click', () => {
+      currentFilter = 'all';
+      currentSearch = '';
+      currentSort = 'newest';
+      searchInput.value = '';
+      filterButtons.forEach(b => b.classList.toggle('active', b.dataset.filter === 'all'));
+      sortSelect.value = 'newest';
+      currentPage = 1;
+      renderItems();
+    });
+
+    // Pagination
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) { currentPage--; renderItems(); }
+    });
+    nextBtn.addEventListener('click', () => {
+      const totalPages = Math.ceil(getFilteredItems().length / itemsPerPage);
+      if (currentPage < totalPages) { currentPage++; renderItems(); }
+    });
+  }
+
+  function getFilteredItems() {
+    const data = currentTab === 'tips' ? articlesData : coursesData;
+    let filtered = [...data];
+
+    if (currentSearch) {
+      filtered = filtered.filter(item =>
+        item.title.toLowerCase().includes(currentSearch) ||
+        (item.excerpt || item.description || '').toLowerCase().includes(currentSearch)
+      );
+    }
+
+    if (currentFilter !== 'all') {
+      filtered = filtered.filter(item => item.category_slug === currentFilter);
+    }
+
+    filtered.sort((a, b) => {
+      if (currentSort === 'newest') return new Date(b.created_at || b.start_date) - new Date(a.created_at || a.start_date);
+      if (currentSort === 'oldest') return new Date(a.created_at || a.start_date) - new Date(b.created_at || b.start_date);
+      if (currentSort === 'popular') return (b.views || 0) - (a.views || 0);
+      if (currentSort === 'reading-time') return (a.reading_time || a.duration || 0) - (b.reading_time || b.duration || 0);
+      return 0;
+    });
+
+    return filtered;
+  }
+
+  function renderItems() {
+    const filtered = getFilteredItems();
+    const total = filtered.length;
+    const allCount = currentTab === 'tips' ? articlesData.length : coursesData.length;
+    const itemName = currentTab === 'tips' ? 'ترفند' : 'دوره';
+
+    resultsCountText.innerHTML = `نمایش <span>${total}</span> ${itemName} از <span>${allCount}</span> ${itemName}`;
+
+    if (total === 0) {
+      tipsGrid.innerHTML = '';
+      noResults.style.display = 'block';
+      pagination.style.display = 'none';
+      return;
+    }
+
+    noResults.style.display = 'none';
+    pagination.style.display = 'flex';
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const paginated = filtered.slice(start, start + itemsPerPage);
+
+    if (currentTab === 'tips') {
+      tipsGrid.innerHTML = paginated.map(item => `
+        <article class="tip-card-list">
+          <div class="tip-image-list">
+            <img src="${item.featured_image || '{% static "images/placeholder.jpg" %}'}" alt="${item.title}">
+            <span class="tip-category-badge">${item.category_name}</span>
+          </div>
+          <div class="tip-content-list">
+            <h3 class="tip-title-list">${item.title}</h3>
+            <p class="tip-excerpt-list">${item.excerpt || ''}</p>
+            <a href="/tips/${item.slug}/" class="tip-link-list">مطالعه ترفند →</a>
+            <div class="tip-meta-list">
+              <div class="tip-date">📅 ${new Date(item.created_at).toLocaleDateString('fa-IR')}</div>
+              <div class="tip-read-time">⏱️ ${item.reading_time} دقیقه</div>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    } else {
+      tipsGrid.innerHTML = paginated.map(item => `
+        <article class="course-card">
+          <div class="course-image">
+            <img src="${item.image || '{% static "images/placeholder.jpg" %}'}" alt="${item.title}">
+          </div>
+          <div class="course-header">
+            <h3 class="course-title">${item.title}</h3>
+            <div class="course-date">📅 از ${new Date(item.start_date).toLocaleDateString('fa-IR')} آغاز می‌شود!</div>
+          </div>
+          <div class="course-content">
+            <div class="course-text">${item.description || ''}</div>
+            <ul class="features-list">
+              ${(item.features || '').split('\n').filter(f => f.trim()).map(f => `<li>${f.trim()}</li>`).join('')}
+            </ul>
+          </div>
+          <div class="course-footer">
+            <div class="contact-info">برای اطلاعات بیشتر و ثبت‌نام، با واحد پذیرش تماس بگیرید!</div>
+            <a href="#" class="btn-primary">ماهرانه بیاموز!</a>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    updatePagination(Math.ceil(total / itemsPerPage));
+  }
+
+  function updatePagination(totalPages) {
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+
+    paginationNumbers.innerHTML = '';
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'pagination-btn' + (i === currentPage ? ' active' : '');
+      btn.textContent = i;
+      btn.dataset.page = i;
+      btn.addEventListener('click', () => {
+        currentPage = i;
+        renderItems();
+      });
+      paginationNumbers.appendChild(btn);
+    }
+  }
+</script>
+{% endblock %}

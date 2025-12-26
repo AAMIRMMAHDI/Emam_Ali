@@ -1,0 +1,333 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}مجتمع آموزشی امام علی (ع){% endblock %}</title>
+  <link rel="icon" type="image/png" href="{% static 'icon/icon.png ' %}">
+
+  <!-- فونت فارسی -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --green-light: #e8f5e9;
+      --green-lighter: #f1f8e9;
+      --green-primary: #2e7d32;
+      --green-dark: #1b5e20;
+      --green-darker: #0d3c1c;
+      --green-accent: #4caf50;
+      --green-muted: #81c784;
+      --surface: #ffffff;
+      --text: #1a472a;
+      --muted: #5a7160;
+      --card: #f8fdf8;
+      --border: #c8e6c9;
+      --radius: 18px;
+      --radius-sm: 12px;
+      --shadow-1: 0 8px 24px rgba(46, 125, 50, 0.12);
+      --shadow-2: 0 12px 36px rgba(46, 125, 50, 0.18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      background: var(--surface);
+      color: var(--text);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Vazirmatn', system-ui, -apple-system, sans-serif;
+      line-height: 1.7;
+      background: linear-gradient(180deg, #ffffff 0%, var(--green-light) 100%);
+    }
+
+    .container {
+      width: min(1200px, 94vw);
+      margin-inline: auto;
+      padding-inline: 20px;
+    }
+
+    /* Header */
+    .site-header {
+      background: linear-gradient(135deg, var(--green-dark), var(--green-darker));
+      color: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 8px 24px rgba(27, 94, 32, 0.25);
+      border-bottom: 3px solid var(--green-accent);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-inline: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      color: #fff;
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--green-accent), #66bb6a);
+      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+    }
+
+    .brand-mark img {
+      width: 38px;
+      height: auto;
+    }
+
+    .brand-main {
+      font-size: 1.3rem;
+    }
+
+    .nav-toggle {
+      display: none;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      padding: 8px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-toggle-bar {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      margin: 5px auto;
+      transition: 0.3s;
+      border-radius: 2px;
+    }
+
+    .nav-menu {
+      list-style: none;
+      display: flex;
+      gap: 26px;
+    }
+
+    .nav-menu a {
+      color: #e8f5e9;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-menu a:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    /* Footer */
+    .site-footer {
+      background: linear-gradient(135deg, var(--green-darker), var(--green-dark));
+      color: #e8f5e9;
+      padding: 80px 0 40px;
+      margin-top: 80px;
+      border-top: 5px solid var(--green-accent);
+    }
+
+    .footer-inner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 50px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-inline: 20px;
+    }
+
+    .footer-col h3 {
+      color: white;
+      margin: 0 0 30px;
+      font-size: 1.5rem;
+      font-weight: 800;
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .footer-col h3::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 50px;
+      height: 4px;
+      background: var(--green-accent);
+      border-radius: 2px;
+    }
+
+    .footer-links a {
+      color: #c8e6c9;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: white;
+      transform: translateX(-10px);
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 0;
+      font-size: 1.05rem;
+    }
+
+    .contact-item i {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(76, 175, 80, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--green-accent);
+      font-size: 1.3rem;
+      border: 2px solid rgba(76, 175, 80, 0.3);
+    }
+
+    .copyright {
+      grid-column: 1 / -1;
+      text-align: center;
+      margin-top: 70px;
+      padding-top: 35px;
+      border-top: 2px solid rgba(255, 255, 255, 0.15);
+      color: #a5d6a7;
+      font-size: 1.05rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-toggle { display: flex; flex-direction: column; justify-content: center; }
+      .nav-menu {
+        position: fixed;
+        top: 80px;
+        right: 0;
+        left: 0;
+        background: rgba(27, 94, 32, 0.98);
+        padding: 30px;
+        display: none;
+        flex-direction: column;
+        gap: 20px;
+        z-index: 999;
+      }
+      .nav-menu.is-open { display: flex; }
+      .footer-inner { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="brand">
+        <div class="brand-mark">
+          <img src="{% static 'icon/icon.png' %}" alt="لوگو">
+        </div>
+        <span class="brand-main">مجتمع آموزشی امام علی (ع)</span>
+      </a>
+      <nav>
+        <button class="nav-toggle" aria-label="منو">
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+          <span class="nav-toggle-bar"></span>
+        </button>
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="/">خانه</a></li>
+          <li><a href="/exam/login/">آزمون</a></li>
+          <li><a href="/list/">ترفندها و دوره‌ها</a></li>
+          <li><a href="/about/">درباره / تماس</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  <footer class="site-footer" id="contact">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-col">
+          <h3>مجتمع آموزشی امام علی (ع)</h3>
+          <p>بیش از بیست و پنج سال همراهی شما افتخار ماست!</p>
+          <a class="btn btn-primary" href="/list/">ماهرانه بیاموز!</a>
+        </div>
+        <div class="footer-col">
+          <h3>اطلاعات تماس</h3>
+          <div class="contact-info-footer">
+            <div class="contact-item"><i>📍</i> اراک، خیابان محسنی، ابتدای کوچه محسنی</div>
+            <div class="contact-item"><i>📱</i> ۰۸۶۳۲۲۲۷۲۳۸</div>
+            <div class="contact-item"><i>✉️</i> info@emamali-school.ir</div>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h3>لینک‌های سریع</h3>
+          <ul class="footer-links">
+            <li><a href="/">صفحه اصلی</a></li>
+            <li><a href="/list/">دوره‌ها و ترفندها</a></li>
+            <li><a href="#contact">تماس با ما</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>دسترسی سریع</h3>
+          <ul class="footer-links">
+            <li><a href="/list/">ترفندهای آموزشی</a></li>
+            <li><a href="/list/">دوره‌های آموزشی</a></li>
+            <li><a href="#">ثبت‌نام</a></li>
+          </ul>
+        </div>
+        <div class="copyright">
+          <p>© ۱۴۰۴ مجتمع آموزشی امام علی (ع) — تمامی حقوق محفوظ است.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.getElementById('nav-menu');
+    if (navToggle && navMenu) {
+      navToggle.addEventListener('click', () => navMenu.classList.toggle('is-open'));
+    }
+  </script>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>
